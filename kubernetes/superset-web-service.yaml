@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: superset-web
+  labels:
+    app.kubernetes.io/name: superset  # Asegúrate de que esto coincide con cómo etiquetas tus recursos relacionados con Superset
+spec:
+  selector:
+    app: superset  # Esto debe coincidir exactamente con las etiquetas en los pods de Superset
+  ports:
+  - name: http
+    port: 8089        # Puerto en el que el servicio estará disponible externamente
+    protocol: TCP
+    targetPort: 8088  # Asume que Superset está escuchando en el puerto 8088 dentro de los pods
+  type: LoadBalancer
+

@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-python-etl-capacity-cronjob
+spec:
+  schedule: "*/30 * * * *"  # Ejecuta cada 30 minutos
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: my-python-etl
+            image: cmv0099/my-python-etl-capacity:v2
+            envFrom:  # Pasar secretos al contenedor
+            - secretRef:
+                name: python-etl-auth
+            - secretRef:
+                name: python-etl-data-capacitycontrol
+            - secretRef:
+                name: python-etl-db-secret
+          restartPolicy: OnFailure

@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-python-etl-trafficcontrol-cronjob
+spec:
+  schedule: "*/7 * * * *"  # Ejecuta cada 7 minutos
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: my-python-etl
+            image: cmv0099/my-python-etl-traffic:v2
+            envFrom:  # Pasar secretos al contenedor
+            - secretRef:
+                name: python-etl-auth
+            - secretRef:
+                name: python-etl-data-trafficcontrol
+            - secretRef:
+                name: python-etl-db-secret
+          restartPolicy: OnFailure
